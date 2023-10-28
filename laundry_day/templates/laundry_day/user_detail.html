@@ -1,2 +1,50 @@
 {% extends "laundry_day/base_template.html" %} 
 
+{% block content %}
+<div class="container-fluid">
+    {%if user%}
+
+        <h1>Hello {{user.name}}</h1>
+
+    {%else%}
+
+        <h1>User not found</h1>
+
+    {%endif%}
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Relatives</h2>
+            <ul class= "list-group list-group-flush">
+                {%for relative in relatives%}
+                    <li class="list-group-item">{{relative.name}}</li>
+                {%endfor%}
+                {%for child in children%}
+                    <li class="list-group-item">{{child.name}}</li>
+                {%endfor%}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Laundry Request</h2>
+            <ul>
+                
+                    
+                
+            </ul>
+        </div>
+
+    
+
+
+    
+
+    
+
+</div>
+
+    
+    
+    
+{% endblock %}
+
+
