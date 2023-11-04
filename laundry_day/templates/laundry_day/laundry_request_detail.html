@@ -1,0 +1,32 @@
+{% extends "laundry_day/base_template.html" %} 
+
+{% block content %}
+
+<div class="container-fluid">
+    <h2>{{from_user_id}}</h2>
+    <div class = "row">
+        <h1>My laundry requests:</h1>
+
+        <div class = "col-md-6">
+            <ul>
+                    <li class="list-group-item">{{from_user_id}}:{{laundry_request}} </li>
+            </ul>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock %}

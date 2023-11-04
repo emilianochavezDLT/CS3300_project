@@ -50,7 +50,16 @@ class User(models.Model):
         
     
 
-
+class LaundryRequests(models.Model):
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
+    message = models.CharField(max_length=5000)
+    
+    def __str__(self):
+        return self.message
+    
+    def get_absolute_url(self):
+        return reverse('create_laundry_request', args=[str(self.id)])
     
     
 
