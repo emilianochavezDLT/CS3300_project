@@ -81,9 +81,9 @@ def create_laundry_request(request, pk):
         if form.is_valid():
             form.save()
             return redirect('user_detail', pk=pk)
-        # Do not re-initialize the form here, because this will erase the errors and data
+        
     else:
-        form = CreateLaundryRequest()  # Initialize a new form for a GET request
+        form = CreateLaundryRequest()  
 
     return render(request, 'laundry_day/create_laundry_request.html', {'form': form})
 
