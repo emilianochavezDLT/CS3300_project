@@ -1,12 +1,10 @@
 from django.db import models
-from django.shortcuts import render, HttpResponse
-from django.http import HttpResponse
+from django.shortcuts import render
 from django.views import generic
-from django.views import View
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+
+
 from .forms import *
 from .models import *
 
