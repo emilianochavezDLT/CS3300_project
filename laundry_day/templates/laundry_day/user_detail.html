@@ -18,8 +18,7 @@
     
     
 
-    <div class="row">
-        <div class="col-md-6">
+        <div>
             <h2>Relatives</h2>
             <ul class= "list-group list-group-flush">
                 {%for relative in relatives%}
@@ -30,7 +29,8 @@
                 {%endfor%}
             </ul>
         </div>
-        <div class="col-md-6">
+        
+        <div style="margin-top: 100px;">
             <h2>Laundry Request</h2>
             <h4>Make a Laundry Request</h4> 
             <a class = "btn btn-primary" href="{%url 'create_laundry_request' pk=user.id %}">Laundry Request</a>
@@ -40,6 +40,10 @@
                 {%endfor%}
                 
             </ul>
+        </div>
+
+        <div style="margin-top: 100px;"> 
+            <a class = "btn btn-primary" href="{%url 'laundry_request_detail' user.id%}">To My Laundry Requests</a>
         </div>
 
 

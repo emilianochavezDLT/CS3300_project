@@ -1,32 +1,22 @@
-{% extends "laundry_day/base_template.html" %} 
+{% extends 'laundry_day/base_template.html' %}
 
 {% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <h1>My laundry requests {{ from_user.name }}</h1>
 
-<div class="container-fluid">
-    <h2>{{from_user_id}}</h2>
-    <div class = "row">
-        <h1>My laundry requests:</h1>
+      <div class="col-md-6">
+        <ul>
+          {% for request in laundry_request %}
+            <li class="list-group-item">{{ request.message }}
+                <a class = "btn btn-primary" href = "{%url 'update_laundry_request' from_user.id request.id%}">Update</a>
+                <a class = "btn btn-danger" href="{%url 'delete_laundry_request' request.id%}">Delete</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <div class = "col-md-6">
-            <ul>
-                    <li class="list-group-item">{{from_user_id}}:{{laundry_request}} </li>
-            </ul>
-
-
-        </div>
-
-
-
+      <a class="btn btn-primary btn-small" href="{% url 'user_detail' from_user.id %}">Back To User Detail</a>
     </div>
-
-
-
-</div>
-
-
-
-
-
-
-
+  </div>
 {% endblock %}

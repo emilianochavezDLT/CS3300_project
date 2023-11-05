@@ -1,0 +1,18 @@
+{% extends 'laundry_day/base_template.html' %}
+
+{% block content %}
+
+<h1>Are you sure you want to delete this message?</h1>
+
+
+<form method="post">
+    {% csrf_token %}
+    {{message}}
+    <input type="submit" class = "btn btn-danger" value="Yes" />
+    <input type="submit" class = "btn btn-primary" value="No"/>
+</form>
+
+
+
+
+{% endblock %}

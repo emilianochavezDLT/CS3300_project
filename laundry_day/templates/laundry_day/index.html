@@ -1,1 +1,18 @@
 {% extends "laundry_day/base_template.html" %} 
+
+
+{% block content %}
+{% load static %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Laundry Day</h1>
+            <p>Laundry Day is a web application that allows users to schedule laundry times and make request</p>
+            <p>There will be further implmentation with laundromats where users can schedule to</p>
+            <p>use the laundromat's machines ahead of time.</p>
+
+        </div>
+        <img src="{% static 'images/washer.jpg' %}" alt="Laundry Day Logo" style="width: 400px; height: auto;" class="img-responsive center-block">
+    </div>
+
+{% endblock %}
