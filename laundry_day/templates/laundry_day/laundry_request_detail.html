@@ -3,7 +3,7 @@
 {% block content %}
   <div class="container-fluid">
     <div class="row">
-      <h1>My laundry requests {{ from_user.name }}</h1>
+      <h1>My laundry requests: {{ from_user.name }}</h1>
 
       <div class="col-md-6">
         <ul>
@@ -16,7 +16,7 @@
         </ul>
       </div>
 
-      <a class="btn btn-primary btn-small" href="{% url 'user_detail' from_user.id %}">Back To User Detail</a>
+      <a class="btn btn-outline-primary btn-sm" href="{% url 'user_detail' from_user.id %}">Back To User Detail</a>
     </div>
   </div>
 {% endblock %}

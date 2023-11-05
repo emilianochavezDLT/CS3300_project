@@ -1,18 +1,15 @@
 {% extends 'laundry_day/base_template.html' %}
 
 {% block content %}
+  <div class="container-fluid">
+    <h1>Are you sure you want to delete this message?</h1>
 
-<h1>Are you sure you want to delete this message?</h1>
-
-
-<form method="post">
-    {% csrf_token %}
-    {{message}}
-    <input type="submit" class = "btn btn-danger" value="Yes" />
-    <input type="submit" class = "btn btn-primary" value="No"/>
-</form>
-
-
-
-
+    <form method="post">
+      {% csrf_token %}
+      {{ message }}
+      <input type="submit" class="btn btn-danger" value="Yes" />
+      <a class = "btn btn-primary btn-lg" href="{%url 'user_detail' from_user %}"class="btn btn-primary">NO</a>
+    </form>
+    
+  </div>
 {% endblock %}

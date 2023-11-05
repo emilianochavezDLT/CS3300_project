@@ -7,7 +7,8 @@
     <ul class= "list-group list-group-flush">
       {% for user in users %}
         <li class="list-group-item">
-          <a href="{% url 'user_detail' user.id %}">{{ user.name }}</a>
+            {{ user.name }}
+          <a class = "btn btn-primary"href="{% url 'user_detail' user.id %}">View</a>
         </li>
       {% endfor %}
     </ul>

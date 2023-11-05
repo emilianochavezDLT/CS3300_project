@@ -23,7 +23,7 @@ class UserDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.object
-        laundry_requests = LaundryRequests.objects.filter(from_user=user)
+        laundry_requests = LaundryRequests.objects.filter(to_user=user)
         context['laundry_requests'] = laundry_requests
         context['relatives'] = self.object.get_siblings()
         context['children'] = self.object.children.all()
@@ -65,11 +65,13 @@ def delete_laundry_request(request, pk):
     print(request.method)
     print("in delte_laundry_request")
     laundry_request = LaundryRequests.objects.get(id=pk)
+    from_user = laundry_request.from_user.id
+    print(from_user)
     if request.method == 'POST':
         laundry_request.delete()
         return redirect('user_detail', pk=laundry_request.from_user.id)
     
-    context = {'message': laundry_request}
+    context = {'message': laundry_request,"from_user": from_user}
     return render(request, 'laundry_day/delete_laundry_request.html', context)
 
 def create_laundry_request(request, pk):

@@ -7,7 +7,7 @@
 
     {%if user%}
 
-        <h1>Hello {{user.name}}</h1>
+        <h1 style = "text-align: center;">Hello {{user.name}}</h1>
 
     {%else%}
 
@@ -18,7 +18,7 @@
     
     
 
-        <div>
+        <div style= "margin-top: 50px;">
             <h2>Relatives</h2>
             <ul class= "list-group list-group-flush">
                 {%for relative in relatives%}
@@ -31,31 +31,20 @@
         </div>
         
         <div style="margin-top: 100px;">
-            <h2>Laundry Request</h2>
-            <h4>Make a Laundry Request</h4> 
-            <a class = "btn btn-primary" href="{%url 'create_laundry_request' pk=user.id %}">Laundry Request</a>
+            <h2 >Laundry Requests</h2>
             <ul>
                 {%for request in laundry_requests%}
-                    <li>{{request}}</li>
+                    <li class = "list-group-item">
+                        <p>From: {{request.from_user}}</p>
+                        <p>{{request}}</p></li>
                 {%endfor%}
                 
             </ul>
+            <a class = "btn btn-outline-primary" href="{%url 'create_laundry_request' pk=user.id %}">Make a Laundry Request</a>
+            <a class = "btn btn-outline-primary" href="{%url 'laundry_request_detail' user.id%}">To My Laundry Requests</a>
         </div>
 
-        <div style="margin-top: 100px;"> 
-            <a class = "btn btn-primary" href="{%url 'laundry_request_detail' user.id%}">To My Laundry Requests</a>
-        </div>
-
-
-        
-
-    
-
-
-    
-
-    
-
+  
 </div>
 
     
