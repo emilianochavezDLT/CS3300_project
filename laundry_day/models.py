@@ -4,26 +4,19 @@ from django.urls import reverse
 # Create your models here.
 
 # This is the user model
-class User(models.Model):
+class UserProfile(models.Model):
 
-    # We just want to define the name of the user
-    # This just temporarily defines the user
-    name = models.CharField(max_length=100)
-
-    # This is the string representation of the user
-    # This is what we want to display when we print the user
-    def __str__(self):
-        return self.name
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     
     # We had to define the table name this way because
     # we already have a user table in the database
     class Meta:
-        db_table = 'custom_user'
+        db_table = 'User_Profile'
     
     # This is the url that we want to redirect to when we
     # click on the user's name
     def get_absolute_url(self):
-        return reverse('user_detail', args=[str(self.id)])
+        return reverse('user_detail', args=[str(self.user.id)])
 
     # This is the parent of the current user
     # If the user has no parent, this is null
@@ -44,15 +37,14 @@ class User(models.Model):
             # We want to exclude the current user from the list of siblings
             return self.parent.children.exclude(id=self.id)
         else:
-
             # If there is no parent, there are no siblings
-            return User.objects.none()
+            return UserProfile.objects.none()
         
     
 
 class LaundryRequests(models.Model):
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
+    to_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='to_user')
+    from_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='from_user')
     message = models.CharField(max_length=5000)
     
     def __str__(self):

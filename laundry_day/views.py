@@ -13,15 +13,15 @@ def index(request):
     return render(request, 'laundry_day/index.html')
 
 class UserDetailView(generic.DetailView):
-    model = User
+    model = UserProfile
     template_name = 'laundry_day/user_detail.html'
-    context_object_name = 'user'
+    context_object_name = 'UserProfile'
 
     # This is the context that we want to pass to the template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.object
-        laundry_requests = LaundryRequests.objects.filter(to_user=user)
+        UserProfile = self.object
+        laundry_requests = LaundryRequests.objects.filter(to_user=UserProfile)
         context['laundry_requests'] = laundry_requests
         context['relatives'] = self.object.get_siblings()
         context['children'] = self.object.children.all()
@@ -29,14 +29,14 @@ class UserDetailView(generic.DetailView):
 
 
 class UserListView(generic.ListView):
-    model = User
+    model = UserProfile
     template_name = 'laundry_day/list_of_users.html'
     context_object_name = 'users'
 
  
 
 def laundry_request_detail(request, from_user_id):
-    from_user = User.objects.get(id=from_user_id)
+    from_user = UserProfile.objects.get(id=from_user_id)
     laundry_request = LaundryRequests.objects.filter(from_user=from_user)
     context = {
         'from_user': from_user,
@@ -45,7 +45,7 @@ def laundry_request_detail(request, from_user_id):
     return render(request, 'laundry_day/laundry_request_detail.html', context)
 
 def update_laundry_request(request, from_user_id, pk):
-    from_user = User.objects.get(id=from_user_id)
+    from_user = UserProfile.objects.get(id=from_user_id)
     laundry_request = LaundryRequests.objects.get(id=pk, from_user=from_user_id)
     form = CreateLaundryRequest(instance=laundry_request)
 
