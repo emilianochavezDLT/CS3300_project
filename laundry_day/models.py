@@ -28,6 +28,10 @@ class UserProfile(models.Model):
                                blank=True, 
                                related_name='children',
                                on_delete=models.SET_NULL)  
+   
+    def get_parent(self):
+        return self.parent
+   
 
     
     # This is the list of siblings of the current user
