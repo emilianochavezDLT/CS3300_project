@@ -1,3 +1,4 @@
+from typing import Any
 from django import forms
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
@@ -9,8 +10,24 @@ class CreateUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'first_name','last_name']
+        fields = ['first_name',
+                  'last_name', 
+                  'username', 
+                  'password1', 
+                  'password2'
+                ]
+        
 
+    def save(self, commit=True):
+        user = super(CreateUserForm, self).save(commit=False)
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
+        user.username = self.cleaned_data["username"]
+        if commit:
+            user.save()
+        return user
+
+    
     def clean_username(self):
         username = self.cleaned_data['username']
         if User.objects.filter(username=username).exists():
@@ -25,6 +42,14 @@ class CreateUserForm(UserCreationForm):
         if password1 != password2:
             raise forms.ValidationError("Passwords do not match")
         return password2
+    
+    def __init__(self, *args, **kwargs):
+        super(CreateUserForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
+        self.fields['last_name'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
+        self.fields['username'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
+        self.fields['password1'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
+        self.fields['password2'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
 
 
 

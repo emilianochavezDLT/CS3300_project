@@ -87,12 +87,22 @@ def create_laundry_request(request, pk):
 
 def registerPage(request):
     form = CreateUserForm()
+    print("in registerPage")
     
     if request.method == 'POST':
+        print("in POST")
         form = CreateUserForm(request.POST)
+        print(form)
         if form.is_valid():
+            print("in valid")
             form.save()
-            return redirect('users_list')
+        else:
+            print("not valid")
+            print(form.errors)
+            return render(request, 'laundry_day/register.html', {'form': form})
+    
+    else:
+        form = CreateUserForm()
         
     context = {'form': form}
     return render(request, 'laundry_day/register.html', context)
