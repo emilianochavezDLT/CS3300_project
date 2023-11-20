@@ -28,9 +28,6 @@ class CreateUserForm(UserCreationForm):
 
 
 
-
-
-
 #This is to create a laundry request
 class CreateLaundryRequest(forms.ModelForm):
     class Meta:

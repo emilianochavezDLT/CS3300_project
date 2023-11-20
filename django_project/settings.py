@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #Adding Laundry Day App
     'laundry_day',
-    'bootstrap5'
+    #'bootstrap5',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 # Add support for authenticating users
@@ -57,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 
 ROOT_URLCONF = 'django_project.urls'
@@ -132,6 +136,14 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/images/'
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+NPM_BIN_PATH = "/usr/local/bin/npm"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

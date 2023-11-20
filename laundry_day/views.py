@@ -85,6 +85,18 @@ def create_laundry_request(request, pk):
 
     return render(request, 'laundry_day/create_laundry_request.html', {'form': form})
 
+def registerPage(request):
+    form = CreateUserForm()
+    
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('users_list')
+        
+    context = {'form': form}
+    return render(request, 'laundry_day/register.html', context)
+
     
 
 

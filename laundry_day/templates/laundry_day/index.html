@@ -1,18 +1,23 @@
-{% extends "laundry_day/base_template.html" %} 
-
+{% extends 'laundry_day/base_template.html' %}
+{% load static tailwind_tags %}
 
 {% block content %}
-{% load static %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Laundry Day</h1>
-            <p>Laundry Day is a web application that allows users to schedule laundry times and make request.</p>
-            <p>There will be further implmentation with laundromats where users can schedule to</p>
-            <p>use the laundromat's machines ahead of time.</p>
+ 
 
-        </div>
-        <img src="{% static 'images/washer.jpg' %}" alt="Laundry Day Logo" style="width: 400px; height: auto;" class="img-responsive center-block">
+<div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex-col lg:flex-row">
+      <img src="{% static 'images/washer.jpg' %}" alt="Laundry Day Logo" style="width: 400px; height: auto;"  class="max-w-sm rounded-lg shadow-2xl" />
+      <div>
+        <h1 class="text-5xl font-bold">Box Office News!</h1>
+        <p class="py-6">Laundry Day is a web application that allows users to schedule laundry times and make request.</p>
+        <p class="py-6">There will be further implmentation with laundromats where users can schedule to
+            use the laundromat's machines ahead of time.
+        </p>
+        <button class="btn btn-primary">Get Started</button>
+      </div>
     </div>
-
+  </div>
+  <footer style="font-size:20px">
+    Image by <a href="https://pixabay.com/users/taraghb-2098966/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4164831">taraghb</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4164831">Pixabay</a>
+  </footer>
 {% endblock %}

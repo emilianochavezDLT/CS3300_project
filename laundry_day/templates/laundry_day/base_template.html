@@ -1,54 +1,90 @@
-{% load static %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <title>Laundry Day</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    {% tailwind_css %}
   </head>
 
   <body>
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" > <img src = "{% static 'images/washer.jpg' %}" alt="Laundry Day Icon" style="height: 30px; margin-right: 5px;">Laundry Day</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="{%url 'index'%}" aria-current="page">Home</a>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'users_list' %}">List of Users</a></li>
+    <div class="navbar bg-base-100" data-theme="nord">
+      <div class="navbar-start">
+        <div class="dropdown">
+          <label tabindex="0" class="btn btn-ghost lg:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+            </svg>
+          </label>
+          <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+            <li>
+              <a>Item 1</a>
+            </li>
+            <li>
+              <a>Item 3</a>
+            </li>
+            <li>
+              <a>Parent</a>
+              <ul class="p-2">
+                <li>
+                  <a>Submenu 1</a>
+                </li>
+                <li>
+                  <a>Submenu 2</a>
+                </li>
+              </ul>
+            </li>
           </ul>
-        </li>
-      </ul>
-
-
+        </div>
+        <a class="btn btn-ghost text-xl" href="{%url 'index'%}">Laundry Day</a>
+      </div>
+      <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
+          <li>
+            <a>Item 1</a>
+          </li>
+          <li>
+            <a>Item 3</a>
+          </li>
+          <li tabindex="0">
+            <details>
+              <summary>Parent</summary>
+              <ul class="p-2">
+                <li>
+                  <a>Submenu 1</a>
+                </li>
+                <li>
+                  <a>Submenu 2</a>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+      <div class="navbar-end">
+        <div class="dropdown dropdown-end">
+          <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+            <div class="w-10 rounded-full">
+              <img alt="Tailwind CSS Navbar component" src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+            </div>
+          </label>
+          <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+            <li>
+              <a class="justify-between">
+                Profile
+                <span class="badge">New</span>
+              </a>
+            </li>
+            <li><a>Settings</a></li>
+            <li><a>Logout</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-
-
-  </div>  
-</nav>
-<footer style = "font-size:8px">
-  Image by <a href="https://pixabay.com/users/taraghb-2098966/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4164831">taraghb</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4164831">Pixabay</a>
-</footer>
-
     <!-- add block content from html template -->
     {% block content %}
 
     {% endblock %}
-
   </body>
 </html>
