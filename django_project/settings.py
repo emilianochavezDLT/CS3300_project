@@ -14,6 +14,9 @@ from pathlib import Path
 import os 
 from pathlib import Path
 
+from django.urls import reverse_lazy # allows you to refer to the URL by its name instead of its path
+# This reverse_lazy function will resolve to the URL path associated with the name 'login' from both urls.py file.
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -112,6 +115,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Login Url that redirects to the login page if the user is not logged in
+LOGIN_URL = reverse_lazy('login')
+
+# Redirects to the home page if the login is successful
+LOGIN_REDIRECT_URL = reverse_lazy('index') #Change this to the User Detail Page
 
 
 # Internationalization

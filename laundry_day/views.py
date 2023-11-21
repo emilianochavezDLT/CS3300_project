@@ -2,17 +2,18 @@ from django.db import models
 from django.shortcuts import render
 from django.views import generic
 from django.shortcuts import render, redirect
-
-
-
 from .forms import *
 from .models import *
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Create your views here.
 def index(request):
     return render(request, 'laundry_day/index.html')
 
-class UserDetailView(generic.DetailView):
+class UserDetailView(LoginRequiredMixin, generic.DetailView):
     model = UserProfile
     template_name = 'laundry_day/user_detail.html'
     context_object_name = 'UserProfile'
@@ -20,21 +21,25 @@ class UserDetailView(generic.DetailView):
     # This is the context that we want to pass to the template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        UserProfile = self.object
-        laundry_requests = LaundryRequests.objects.filter(to_user=UserProfile)
-        context['laundry_requests'] = laundry_requests
-        context['relatives'] = self.object.get_siblings()
-        context['children'] = self.object.children.all()
+        user_profile = self.object
+
+        context.update({
+            'laundry_requests': LaundryRequests.objects.filter(to_user=user_profile),
+            'relatives': user_profile.get_siblings(),
+            'children': user_profile.children.all(),
+            'first_name': user_profile.user.first_name,
+            'last_name': user_profile.user.last_name,
+        })
         return context
 
 
-class UserListView(generic.ListView):
+class UserListView(LoginRequiredMixin, generic.ListView):
     model = UserProfile
     template_name = 'laundry_day/list_of_users.html'
     context_object_name = 'users'
 
  
-
+@login_required
 def laundry_request_detail(request, from_user_id):
     from_user = UserProfile.objects.get(id=from_user_id)
     laundry_request = LaundryRequests.objects.filter(from_user=from_user)
@@ -44,6 +49,8 @@ def laundry_request_detail(request, from_user_id):
     }
     return render(request, 'laundry_day/laundry_request_detail.html', context)
 
+
+@login_required
 def update_laundry_request(request, from_user_id, pk):
     from_user = UserProfile.objects.get(id=from_user_id)
     laundry_request = LaundryRequests.objects.get(id=pk, from_user=from_user_id)
@@ -58,6 +65,8 @@ def update_laundry_request(request, from_user_id, pk):
     context = {'form': form}
     return render(request, 'laundry_day/update_laundry_request.html', context)
 
+
+@login_required
 def delete_laundry_request(request, pk):
     print(pk)
     print(request.method)
@@ -72,6 +81,7 @@ def delete_laundry_request(request, pk):
     context = {'message': laundry_request,"from_user": from_user}
     return render(request, 'laundry_day/delete_laundry_request.html', context)
 
+@login_required 
 def create_laundry_request(request, pk):
 
     if request.method == 'POST':
@@ -96,6 +106,10 @@ def registerPage(request):
         if form.is_valid():
             print("in valid")
             form.save()
+
+            #I should change this into login in the future
+            return render(request, 'laundry_day/index.html')
+
         else:
             print("not valid")
             print(form.errors)
@@ -107,9 +121,26 @@ def registerPage(request):
     context = {'form': form}
     return render(request, 'laundry_day/register.html', context)
 
-    
+def loginPage(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')  # Redirect to the index page or your desired page
+            else:
+                # Even though the form is technically valid, authentication has failed
+                form.add_error(None, 'Invalid username or password')  # Add a non-field error
+    else:
+        form = LoginForm()
+    return render(request, 'laundry_day/login.html', {'form': form})
 
-
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
     
 
 

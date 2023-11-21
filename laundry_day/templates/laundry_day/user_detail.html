@@ -7,7 +7,7 @@
 
     {%if user%}
 
-        <h1 style = "text-align: center;">Hello {{user.name}}</h1>
+        <h1 style = "text-align: center;">Hello {{first_name}}</h1>
 
     {%else%}
 
@@ -15,17 +15,14 @@
 
     {%endif%}
 
-    
-    
-
         <div style= "margin-top: 50px;">
             <h2>Relatives</h2>
             <ul class= "list-group list-group-flush">
                 {%for relative in relatives%}
-                    <li class="list-group-item">{{relative.name}}</li>
+                    <li class="list-group-item">{{relative.first_name}} {{relative.last_name}} </li>
                 {%endfor%}
                 {%for child in children%}
-                    <li class="list-group-item">{{child.name}}</li>
+                    <li class="list-group-item">{{child.first_name}} {{child.last_name}}</li>
                 {%endfor%}
             </ul>
         </div>

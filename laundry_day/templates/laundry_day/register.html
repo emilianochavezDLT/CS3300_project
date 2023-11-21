@@ -34,10 +34,12 @@
             <label for="Password1" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
             <div class="mt-2">
               {{form.password1}}
-              <p class="text-sm text-gray-600">Password must be at least 8 characters long.</p>
+              {% for error in form.password1.errors %}
+                <p class="text-sm text-red-600">{{error}}</p>
+              {% endfor %}
+              <p class="text-sm text-gray-600">{{form.password1.help_text}}</p>
             </div>
           </div>
-
           <div class="col-span-full">
             <label for="Password2" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
             <div class="mt-2">

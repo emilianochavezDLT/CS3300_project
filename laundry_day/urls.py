@@ -10,4 +10,5 @@ urlpatterns = [
     path('user/<int:pk>/deletelaundryrequest', views.delete_laundry_request, name='delete_laundry_request'),
     path('users/', views.UserListView.as_view(), name='users_list'),
     path('register/', views.registerPage, name="register"),
+    path('login/', views.loginPage, name="login"),
 ]   
