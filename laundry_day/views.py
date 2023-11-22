@@ -32,11 +32,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # LOGIN_REDIRECT_URL = reverse_lazy('user_detail') #Change this to the User Detail Page
 
 
-# Create your views here.
+# Create your views here #
+
+## Index ##
 def index(request):
     return render(request, 'laundry_day/index.html')
-
-
 
 
 ## Login, Logout, and Register ##
@@ -80,7 +80,7 @@ def loginPage(request):
             user = authenticate(request, username=username, password=password) # Authentication
             if user is not None: # If authentication was successful
                 login(request, user) # Save the user and log them in
-                return redirect('user_detail') # Redirect the userdetailpage.
+                return redirect('user_detail', pk=request.user.pk) # Redirect the userdetailpage.
             else:
                 print("not valid") # If authentication failed
                 form.add_error(None, 'Invalid username or password')  # Add an error to the form
