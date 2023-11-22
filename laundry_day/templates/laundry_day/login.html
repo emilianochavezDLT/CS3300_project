@@ -20,6 +20,9 @@
               <label class="label"><span class="label-text">Password</span></label>
                 {{ form.password }} 
               <label class="label"><a href="#" class="label-text-alt link link-hover">Forgot password?</a></label>
+              {% if form.errors %}
+                <p class="text-red-500">Your username or password is incorrect.</p>
+              {% endif %}
             </div>
             <div class="form-control mt-6">
               <button class="btn btn-primary">Login</button>

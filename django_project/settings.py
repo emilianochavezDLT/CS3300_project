@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_URL = reverse_lazy('login')
 
 # Redirects to the home page if the login is successful
-LOGIN_REDIRECT_URL = reverse_lazy('index') #Change this to the User Detail Page
+LOGIN_REDIRECT_URL = reverse_lazy('user_detail') #Change this to the User Detail Page
 
 
 # Internationalization

@@ -3137,10 +3137,6 @@ details.collapse summary::-webkit-details-marker {
   line-height: 1em;
 }
 
-.input-bordered {
-  border-color: var(--fallback-bc,oklch(var(--bc)/0.2));
-}
-
 .input:focus,
   .input:focus-within {
   box-shadow: none;
@@ -4078,6 +4074,11 @@ details.collapse summary::-webkit-details-marker {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .shadow {

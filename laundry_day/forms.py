@@ -63,9 +63,13 @@ class LoginForm(forms.Form):
         return username
     
     def clean_password(self):
-        username = self.cleaned_data['username']
-        password = self.cleaned_data['password']
-        user = User.objects.get(username=username)
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        if username is None:
+            raise forms.ValidationError("Username is required.")
+        user = User.objects.filter(username=username).first()
+        if user is None:
+            raise forms.ValidationError("Username does not exist.")
         if not user.check_password(password):
             raise forms.ValidationError("Password is incorrect")
         return password
