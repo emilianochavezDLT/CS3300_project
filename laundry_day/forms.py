@@ -85,8 +85,51 @@ class CreateLaundryRequest(forms.ModelForm):
         model = LaundryRequests
         fields = '__all__'
 
-    
 
+
+
+
+class CreateFamilyForm(forms.ModelForm):
+    class Meta:
+        model = Family
+        fields = ['family_name', 'family_code']
+        
+    def __init__(self, *args, **kwargs):
+        super(CreateFamilyForm, self).__init__(*args, **kwargs)
+        self.fields['family_name'].widget.attrs.update({
+                                                        'class':'flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md', 
+                                                        'placeholder':'Family Name'}
+                                                    )
+        self.fields['family_code'].widget.attrs.update({
+                                                        'class':'flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md', 
+                                                        'placeholder':'Family Code'}
+                                                    )
+
+
+class AddFamilyMembersForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=100)
+    family_code = forms.CharField(label='Family Code', max_length=4)
+    
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        try:
+            user = User.objects.get(username=username)
+            return user
+        except User.DoesNotExist:
+            raise forms.ValidationError("Username does not exist")
+    
+    def clean_family_code(self):
+        family_code = self.cleaned_data['family_code']
+        try:
+            family = Family.objects.get(family_code=family_code)
+            return family
+        except Family.DoesNotExist:
+            raise forms.ValidationError("Family code does not exist")
+    
+    def __init__(self, *args, **kwargs):
+        super(AddFamilyMembersForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
+        self.fields['family_code'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
 
     
     

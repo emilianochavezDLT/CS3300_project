@@ -1,0 +1,44 @@
+{% extends 'laundry_day/base_template.html' %}
+{% load static tailwind_tags %}
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="hero min-h-screen bg-base-200">
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+          <h1 class="text-5xl font-bold">Create a Family</h1>
+          <p class="py-6"></p>
+        </div>
+        <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100 " style="padding: 10px;">
+          <form class="card-body">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Family Name</span>
+              </label>
+              {{form.family_name}}
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Code</span>
+              </label>
+                {{form.family_code}}
+              <label class="label">
+                <a href="#" class="label-text-alt link link-hover">Enter a 4 digit numerical code</a>
+              </label>
+            </div>
+            <div class="form-control mt-6">
+              <button class="btn btn-primary">Create Family</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</form>
+
+
+
+
+
+{% endblock %}

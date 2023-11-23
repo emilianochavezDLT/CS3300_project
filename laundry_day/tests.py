@@ -37,10 +37,7 @@ class LoginTest(TestCase):
 
 #class LaundryRequestTestCase(TestCase):
 #    def setUp(self):
-#        self.user1 = User.objects.create_user(username="user1", password="password1")
-#        self.user2 = User.objects.create_user(username="user2", password="password2")
-#        self.user_profile1 = UserProfile.objects.create(user=self.user1)
-#        self.user_profile2 = UserProfile.objects.create(user=self.user2)
+#        
 #        self.laundry_request1 = LaundryRequests.objects.create(to_user=self.user_profile1, from_user=self.user_profile2, message="message1")
 #        self.laundry_request2 = LaundryRequests.objects.create(to_user=self.user_profile2, from_user=self.user_profile1, message="message2")
 #

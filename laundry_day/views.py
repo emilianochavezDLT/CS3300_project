@@ -108,14 +108,31 @@ class UserDetailView(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs) # Get the context from the parent class
         user_profile = self.object # Get the user profile
 
+        # Get the user
+        user = User.objects.get(id=user_profile.user.id) # Get the user and there id
+        families = user.family_members.all() # Get all the families for this user based on user_id
+        # Remember that the relationship is defined in the UserProfile model, but 
+        # is directly related to the auth.User model.         
+
+        # Get all the family members for each family
+        family_dict = {} # Create a dictionary to store the family name and family members
+        for family in families:
+            member_names = [] # Create a list to store the family members
+            for member in family.family_members.all(): # Get all the family members for this family
+                member_names.append(member.first_name + " " + member.last_name) # Add the family member to the list
+            family_dict[family.family_name] = member_names # Add the family name and family members to the dictionary
+
+    
         # Update the context with the user profile
         context.update({
             'laundry_requests': LaundryRequests.objects.filter(to_user=user_profile),
-            'relatives': user_profile.get_siblings(),
-            'children': user_profile.children.all(),
             'first_name': user_profile.user.first_name,
             'last_name': user_profile.user.last_name,
+            'family': family_dict,
+            
         })
+        
+        
         return context # Return the updated context to the template
 
 
@@ -124,7 +141,51 @@ class UserListView(LoginRequiredMixin, generic.ListView):
     template_name = 'laundry_day/list_of_users.html' # This is the template that we want to use
     context_object_name = 'users' # This is the context that we want to use
 
- 
+
+
+## Family Related Views ##
+
+@login_required
+def create_family(request):
+    if request.method == 'POST':
+        print(request.user.id)
+        form = CreateFamilyForm(request.POST)
+        if form.is_valid():
+            print("in valid")
+            family = form.save()
+            print(family)
+            family.family_members.add(request.user.id)
+            print(family.family_members)
+
+            return redirect('user_detail', pk=request.user.id)
+        
+    else:
+        form = CreateFamilyForm()  
+
+    return render(request, 'laundry_day/create_family.html', {'form': form})
+
+
+
+
+# This is function view to add to a family
+@login_required
+def add_to_family(request, family_code, family_name):
+    family = Family.objects.get(family_code=family_code, family_name=family_name)
+    if request.method == 'POST':
+        form = AddFamilyMembersForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['username']
+            family_code = form.cleaned_data['family_code']
+
+            if family.family_code == family_code:
+                family.family_members.add(user)
+                return redirect('user_detail', pk=user.id)
+            else:
+                form.add_error('family_code', 'Invalid family code.')
+    else:
+        form = AddFamilyMembersForm()
+
+    return render(request, 'laundry_day/add_to_family.html', {'form': form, 'family': family})
 
 
 ## Laundry Request Related Views ##
