@@ -83,10 +83,16 @@ class LoginForm(forms.Form):
 class CreateLaundryRequest(forms.ModelForm):
     class Meta:
         model = LaundryRequests
-        fields = '__all__'
+        fields = ['to_user', 'message']
 
-
-
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        print(user)
+        super(CreateLaundryRequest, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['to_user'].queryset = User.objects.filter(family=user.families)
+        else:
+            self.fields['to_user'].queryset = User.objects.none()
 
 
 class CreateFamilyForm(forms.ModelForm):
@@ -116,15 +122,18 @@ class AddFamilyMembersForm(forms.Form):
             user = User.objects.get(username=username)
             return user
         except User.DoesNotExist:
-            raise forms.ValidationError("Username does not exist")
+            raise forms.ValidationError("Username might be incorrect")
     
     def clean_family_code(self):
         family_code = self.cleaned_data['family_code']
         try:
+            
             family = Family.objects.get(family_code=family_code)
-            return family
+            familyCode = family.family_code
+            print(familyCode)
+            return familyCode
         except Family.DoesNotExist:
-            raise forms.ValidationError("Family code does not exist")
+            raise forms.ValidationError("Family code might be incorrect")
     
     def __init__(self, *args, **kwargs):
         super(AddFamilyMembersForm, self).__init__(*args, **kwargs)

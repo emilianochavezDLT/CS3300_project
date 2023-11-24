@@ -9,18 +9,18 @@
     {% endif %}
 
     <h1 class="text-3xl font-bold">Families</h1>
-    {% for family_name, members in family.items %}
+    {% for family_name, family_info in family.items %}
     <div class="card w-96 bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">{{family_name}}</h2>
           
             <ul>
-                {% for member in members %}
+                {% for member in family_info.members %}
                 <li>{{ member }}</li>
                 {% endfor %}
             </ul>
         <div class="card-actions justify-end">
-          <a class="btn btn-primary">View Family</a>
+          <a href="{%url 'family_detail' family_info.id%}" class="btn btn-primary">View Family</a>
         </div>
       </div>
     </div>

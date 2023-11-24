@@ -1,0 +1,23 @@
+{% extends 'laundry_day/base_template.html' %}
+
+{% block content %}
+    {% for family_name, family_info in family_dict.items %}
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+      {{ family_name }}
+      </h3>
+      <ul role="list" class="divide-y divide-gray-100">
+        {% for member in family_info %}
+          <li class="flex justify-between gap-x-6 py-5">
+            <div class="flex min-w-0 gap-x-4">
+              <div class="min-w-0 flex-auto">
+                <p class="text-m font-semibold leading-6 text-gray-900">{{ member.first_name }} {{ member.last_name }}</p>
+                <p class="mt-1 truncate text-m leading-5 text-gray-500">{{ member.username }}</p>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+
+
+{% endblock %}

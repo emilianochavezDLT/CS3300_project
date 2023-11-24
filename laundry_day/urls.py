@@ -12,6 +12,7 @@ urlpatterns = [
     path('register/', views.registerPage, name="register"),
     path('login/', views.loginPage, name="login"),
     path('logout/', views.logoutUser, name="logout"),
+    path('family/<int:pk>', views.FamilyDetailView.as_view(), name='family_detail'),
     path('createfamily/', views.create_family, name='create_family'),
-    path('addtofamily/<int:family_id>', views.add_to_family, name='add_to_family'),
+    path('addtofamily/<int:pk>', views.add_to_family, name='add_to_family'),
 ]   

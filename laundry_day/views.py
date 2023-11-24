@@ -74,7 +74,7 @@ def registerPage(request): # This is the register view to register the user
 def loginPage(request):
     if request.method == 'POST': # If the form has been submitted...
         form = LoginForm(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
+        if form.is_valid(): # All validation passes
             username = form.cleaned_data.get('username') # Cleaned (normalized) data
             password = form.cleaned_data.get('password') # Cleaned (normalized) data
             user = authenticate(request, username=username, password=password) # Authentication
@@ -120,7 +120,7 @@ class UserDetailView(LoginRequiredMixin, generic.DetailView):
             member_names = [] # Create a list to store the family members
             for member in family.family_members.all(): # Get all the family members for this family
                 member_names.append(member.first_name + " " + member.last_name) # Add the family member to the list
-            family_dict[family.family_name] = member_names # Add the family name and family members to the dictionary
+            family_dict[family.family_name] = {'id': family.id,'members':member_names}# Add the family name and family members to the dictionary
 
     
         # Update the context with the user profile
@@ -144,6 +144,41 @@ class UserListView(LoginRequiredMixin, generic.ListView):
 
 
 ## Family Related Views ##
+
+
+class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Family # This is the model that we want to use
+    template_name = 'laundry_day/family_detail.html' # This is the template that we want to use
+    context_object_name = 'family' # This is the context that we want to use
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        family = self.object # Get the family
+
+
+        # Here im just creating a list of dictionaries to store the family members
+        family_members = family.family_members.all() # Get all the family members for this family
+        family_member_list = [] # Create a list to store the family members
+        for member in family_members:  # Get all the family members for this family
+
+            # Add the family member to the list
+            family_member_list.append({
+                'username': member.username, # Get the username
+                'first_name': member.first_name, # Get the first name
+                'last_name': member.last_name # Get the last name
+            })
+        
+        context.update({
+            'family_dict': {family.family_name: family_member_list}, # Add the family name and family members to the dictionary
+            # It looks like this: 
+            # {'family_name': [{'username': 'username', 'first_name': 'first_name', 'last_name': 'last_name'}, 
+            # {'username': 'username', 'first_name': 'first_name', 'last_name': 'last_name'}]}
+            'family_code': family.family_code, # Add the family code
+            'family_id': family.id, # Add the family id
+        })
+        return context # Return the updated context to the template
+
+
 
 @login_required
 def create_family(request):
@@ -169,15 +204,15 @@ def create_family(request):
 
 # This is function view to add to a family
 @login_required
-def add_to_family(request, family_code, family_name):
-    family = Family.objects.get(family_code=family_code, family_name=family_name)
+def add_to_family(request, pk):
+    family = Family.objects.get(id=pk)
     if request.method == 'POST':
         form = AddFamilyMembersForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data['username']
-            family_code = form.cleaned_data['family_code']
+            family_name = form.cleaned_data['family_code']
 
-            if family.family_code == family_code:
+            if family.family_code == family_name:
                 family.family_members.add(user)
                 return redirect('user_detail', pk=user.id)
             else:
@@ -186,6 +221,7 @@ def add_to_family(request, family_code, family_name):
         form = AddFamilyMembersForm()
 
     return render(request, 'laundry_day/add_to_family.html', {'form': form, 'family': family})
+
 
 
 ## Laundry Request Related Views ##
@@ -199,6 +235,26 @@ def laundry_request_detail(request, from_user_id):
         'laundry_request': laundry_request,
     }
     return render(request, 'laundry_day/laundry_request_detail.html', context)
+
+
+@login_required 
+def create_laundry_request(request, pk):
+    print(request.user.is_authenticated)
+    if request.method == 'POST':
+        form = CreateLaundryRequest(request.POST, user=request.user)
+        print(form)
+        if form.is_valid():
+            laundry_request = form.save(commit=False)
+            laundry_request.from_user = request.user
+            form.save()
+            return redirect('user_detail', pk=pk)
+        
+    else:
+        form = CreateLaundryRequest(request.POST, user=request.user)  
+
+    return render(request, 'laundry_day/create_laundry_request.html', {'form': form})
+
+
 
 
 @login_required
@@ -231,20 +287,6 @@ def delete_laundry_request(request, pk):
     
     context = {'message': laundry_request,"from_user": from_user}
     return render(request, 'laundry_day/delete_laundry_request.html', context)
-
-@login_required 
-def create_laundry_request(request, pk):
-
-    if request.method == 'POST':
-        form = CreateLaundryRequest(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('user_detail', pk=pk)
-        
-    else:
-        form = CreateLaundryRequest()  
-
-    return render(request, 'laundry_day/create_laundry_request.html', {'form': form})
 
 
    

@@ -2,8 +2,46 @@
 {% load static tailwind_tags %}
 
 {% block content %}
-
-
-
-
+  <form method="post">
+    {% csrf_token %}
+    <div class="hero min-h-screen bg-base-200">
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+          <h1 class="text-5xl font-bold">Add to Family</h1>
+          <p class="py-6"></p>
+        </div>
+        <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100" style="padding: 10px;">
+          <form class="card-body">
+            <div class="form-control">
+              <label class="label"><span class="label-text">Family Name</span></label>
+              {{family.family_name}}
+            </div>
+            <div class="form-control">
+              <label class="label"><span class="label-text">Code</span></label>
+              {{ form.family_code }}
+              <label class="label"><a href="#" class="label-text-alt link link-hover">Enter a 4 digit numerical code</a></label>
+            </div>
+            <div class="form-control">
+              <label class="label"><span class="label-text">Member Username</span></label>
+              {{ form.username }}
+              <label class="label"><a href="#" class="label-text-alt link link-hover">Enter the user to be added to the family</a></label>
+            </div>
+            {%if form.errors%}
+            <div class="card w-50 bg-error shadow-xl">
+              <div class="card-body">
+                <h2 class="card-title">Error</h2>
+                {% for field in form %}
+                {% for error in field.errors %}
+                <p>{{error}}</p>
+                {% endfor %}
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+            <div class="form-control mt-6">
+              <button class="btn btn-primary">Add Member</button>
+            </div>
+        </div>
+    </div>
+  </form>
 {% endblock %}
