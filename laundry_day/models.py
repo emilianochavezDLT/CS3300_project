@@ -19,6 +19,8 @@ class UserProfile(models.Model):
     class Meta:
         db_table = 'User_Profile'
     
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
     
     # This is the url that we want to redirect to when we
     # click on the user's name

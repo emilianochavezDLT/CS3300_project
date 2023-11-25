@@ -184,18 +184,18 @@ class FamilyDetailView(LoginRequiredMixin, generic.DetailView):
 def create_family(request):
     if request.method == 'POST':
         print(request.user.id)
-        form = CreateFamilyForm(request.POST)
-        if form.is_valid():
-            print("in valid")
-            family = form.save()
+        form = CreateFamilyForm(request.POST) # Create a form instance
+        if form.is_valid(): # Check if the form is valid
+            print("in valid") 
+            family = form.save() # Save the family
             print(family)
-            family.family_members.add(request.user.id)
-            print(family.family_members)
+            family.family_members.add(request.user.id) # Add the user to the family
+            print(family.family_members) 
 
-            return redirect('user_detail', pk=request.user.id)
+            return redirect('user_detail', pk=request.user.id) # Redirect to the user detail page
         
     else:
-        form = CreateFamilyForm()  
+        form = CreateFamilyForm()   # Create a form instance
 
     return render(request, 'laundry_day/create_family.html', {'form': form})
 
@@ -205,22 +205,22 @@ def create_family(request):
 # This is function view to add to a family
 @login_required
 def add_to_family(request, pk):
-    family = Family.objects.get(id=pk)
+    family = Family.objects.get(id=pk) # Get the family
     if request.method == 'POST':
-        form = AddFamilyMembersForm(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data['username']
-            family_name = form.cleaned_data['family_code']
+        form = AddFamilyMembersForm(request.POST) # Create a form instance
+        if form.is_valid(): # Check if the form is valid
+            user = form.cleaned_data['username'] # Get the username
+            family_name = form.cleaned_data['family_code'] # Get the family code
 
-            if family.family_code == family_name:
-                family.family_members.add(user)
-                return redirect('user_detail', pk=user.id)
+            if family.family_code == family_name: # Check if the family code is correct
+                family.family_members.add(user) # Add the user to the family
+                return redirect('user_detail', pk=user.id) # Redirect to the user detail page
             else:
-                form.add_error('family_code', 'Invalid family code.')
+                form.add_error('family_code', 'Invalid family code.') # Add an error to the form
     else:
-        form = AddFamilyMembersForm()
+        form = AddFamilyMembersForm() # Create a form instance
 
-    return render(request, 'laundry_day/add_to_family.html', {'form': form, 'family': family})
+    return render(request, 'laundry_day/add_to_family.html', {'form': form, 'family': family}) # Render the template with the form and family
 
 
 
@@ -228,29 +228,31 @@ def add_to_family(request, pk):
 
 @login_required
 def laundry_request_detail(request, from_user_id):
-    from_user = UserProfile.objects.get(id=from_user_id)
-    laundry_request = LaundryRequests.objects.filter(from_user=from_user)
+    from_user = UserProfile.objects.get(id=from_user_id) # Get the user profile
+    laundry_request = LaundryRequests.objects.filter(from_user=from_user) # Get the laundry requests for this user
     context = {
-        'from_user': from_user,
-        'laundry_request': laundry_request,
+        'from_user': from_user, # Add the user profile to the context
+        'laundry_request': laundry_request, # Add the laundry requests to the context
     }
-    return render(request, 'laundry_day/laundry_request_detail.html', context)
+    return render(request, 'laundry_day/laundry_request_detail.html', context) # Render the template with the context
 
 
 @login_required 
 def create_laundry_request(request, pk):
-    print(request.user.is_authenticated)
     if request.method == 'POST':
-        form = CreateLaundryRequest(request.POST, user=request.user)
+        # Check the CreateLaundryRequest form in forms.py to see what is happening here
+        # There is kwargs in the form, so we have to send the user to the form. 
+        # In our forms.py, we will asign the user here: user = kwargs.pop('user', None)
+        # We can do that by sending the user in the form like this: CreateLaundryRequest(request.POST, user=request.user)
+        form = CreateLaundryRequest(request.POST, user=request.user) # Create a form instance and send the user to the form
         print(form)
         if form.is_valid():
-            laundry_request = form.save(commit=False)
-            laundry_request.from_user = request.user
-            form.save()
-            return redirect('user_detail', pk=pk)
-        
+            laundry_request = form.save(commit=False) # Save the laundry request
+            laundry_request.from_user = UserProfile.objects.get(user=request.user) # Add the from user
+            form.save() # Save the laundry request
+            return redirect('user_detail', pk=pk) # Redirect to the user detail page
     else:
-        form = CreateLaundryRequest(request.POST, user=request.user)  
+        form = CreateLaundryRequest(user=request.user)  # Create a form instance and send the user to the form
 
     return render(request, 'laundry_day/create_laundry_request.html', {'form': form})
 
@@ -259,34 +261,36 @@ def create_laundry_request(request, pk):
 
 @login_required
 def update_laundry_request(request, from_user_id, pk):
-    from_user = UserProfile.objects.get(id=from_user_id)
-    laundry_request = LaundryRequests.objects.get(id=pk, from_user=from_user_id)
-    form = CreateLaundryRequest(instance=laundry_request)
+    from_user = UserProfile.objects.get(id=from_user_id) # Get the user profile from the url
+    laundry_request = LaundryRequests.objects.get(id=pk, from_user=from_user) # Get the laundry request
+    to_user = laundry_request.to_user # Get the to user
+
+    # Check the UpdateLaundryRequest form in forms.py to see what is happening here
+    form = UpdateLaundryRequest(instance=laundry_request, user=request.user, to_user=to_user, initial={'to_user': to_user}) # Create a form instance and send the user and to_user to the form
 
     if request.method == 'POST':
-        form = CreateLaundryRequest(request.POST, instance=laundry_request)
+        form = UpdateLaundryRequest(request.POST, instance=laundry_request, user=request.user, to_user=to_user, initial={'to_user': to_user}) # Create a form instance and send the user and to_user to the form
         if form.is_valid():
-            form.save()
-            return redirect('laundry_request_detail', from_user_id=laundry_request.from_user.id)
+            form.save() # Save the laundry request
+            return redirect('laundry_request_detail', from_user_id=laundry_request.from_user.id) # Redirect to the laundry request detail page
 
-    context = {'form': form}
+    context = {'form': form} # Context
     return render(request, 'laundry_day/update_laundry_request.html', context)
-
 
 @login_required
 def delete_laundry_request(request, pk):
     print(pk)
     print(request.method)
-    print("in delte_laundry_request")
-    laundry_request = LaundryRequests.objects.get(id=pk)
-    from_user = laundry_request.from_user.id
+    print("in delete_laundry_request")
+    laundry_request = LaundryRequests.objects.get(id=pk) # Get the laundry request
+    from_user = laundry_request.from_user.id # Get the from user
     print(from_user)
     if request.method == 'POST':
-        laundry_request.delete()
-        return redirect('user_detail', pk=laundry_request.from_user.id)
+        laundry_request.delete() # Delete the laundry request
+        return redirect('user_detail', pk=laundry_request.from_user.id) # Redirect to the user detail page
     
     context = {'message': laundry_request,"from_user": from_user}
-    return render(request, 'laundry_day/delete_laundry_request.html', context)
+    return render(request, 'laundry_day/delete_laundry_request.html', context) # Render the template with the context
 
 
    
