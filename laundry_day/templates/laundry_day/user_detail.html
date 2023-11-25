@@ -3,7 +3,7 @@
 {% block content %}
   <div class="container-fluid">
     {% if user %}
-      <h1 style="text-align: center;" class="text-5xl font-bold">Hello {{ first_name }} {{last_name}}</h1>
+      <h1 style="text-align: center; margin-bottom: 20px;" class="text-5xl font-bold">Hello {{ first_name }} {{last_name}}</h1>
     {% else %}
       <h1>User not found</h1>
     {% endif %}
@@ -26,17 +26,15 @@
     </div>
     {% endfor %}
     <div style="margin-top: 100px;">
-      <h2>Laundry Requests</h2>
-      <ul>
-        {% for request in laundry_requests %}
-          <li class="list-group-item">
-            <p>From: {{ request.from_user }}</p>
-            <p>{{ request }}</p>
-          </li>
-        {% endfor %}
-      </ul>
-      <a class="btn btn-outline-primary" href="{% url 'create_laundry_request' pk=user.id %}">Make a Laundry Request</a>
-      <a class="btn btn-outline-primary" href="{% url 'laundry_request_detail' user.id %}">To My Laundry Requests</a>
+      <h2 class="text-3xl font-bold" style="text-align: left;">Laundry Requests</h2>
+      {% for request in laundry_requests %}
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm font-medium leading-6 text-gray-900">{{ request.from_user }}</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ request }}</dd>
+      </div>
+      {% endfor %}
+      <a class="btn btn-outline btn-primary" href="{% url 'create_laundry_request' pk=user.id %}" style="margin-top: 20px; margin-left: 20px;">Make a Laundry Request</a>
+      <a class="btn btn-outline btn-primary" href="{% url 'laundry_request_detail' user.id %}" style="margin-top: 20px; margin-left: 20px;">To My Laundry Requests</a>
     </div>
   </div>
 {% endblock %}

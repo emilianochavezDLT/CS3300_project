@@ -15,8 +15,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Render will render the template with the context
 
 # So, 
-# If you want to redirect to the template, you have to use render
-# If you want to redirect to the url, you have to use redirect
+# To direct the user to the template, you have to use render
+# To direct the user to the url, you have to use redirect
+# You can user either one, but choose the best one for the situation
 
 # Login required decorator will check if the user is logged in or not
 # If the user is not logged in, it will redirect to the login page
@@ -266,6 +267,7 @@ def update_laundry_request(request, from_user_id, pk):
     to_user = laundry_request.to_user # Get the to user
 
     # Check the UpdateLaundryRequest form in forms.py to see what is happening here
+    # It in the init function
     form = UpdateLaundryRequest(instance=laundry_request, user=request.user, to_user=to_user, initial={'to_user': to_user}) # Create a form instance and send the user and to_user to the form
 
     if request.method == 'POST':

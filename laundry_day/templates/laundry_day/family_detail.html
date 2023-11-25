@@ -19,6 +19,7 @@
       </ul>
     {% endfor %}
     <a class="btn btn-outline btn-primary" href="{%url 'add_to_family' family.id%}" style="margin-left: 20px;">Add to Family</a>
+    <a class="btn btn-outline btn-info" href="{% url 'user_detail' request.user.id%}">Back</a>
 
 
 {% endblock %}
