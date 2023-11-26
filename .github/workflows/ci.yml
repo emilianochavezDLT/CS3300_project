@@ -2,9 +2,15 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main, sprint01, testcases" ]
+    branches: 
+      - main
+      - sprint01
+      - testcases
   pull_request:
-    branches: [ "main, sprint01, testcases" ]
+    branches: 
+      - main
+      - sprint01
+      - testcases
 
 jobs:
   build:
@@ -20,7 +26,10 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: pip install -r requirements.txt  # Don't forget to install dependencies
     - name: Run Tests with Coverage
       run: |
         coverage run manage.py test
         coverage report
+
