@@ -1,12 +1,12 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from laundry_day.models import *
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth import authenticate
-from django.contrib.auth.password_validation import validate_password
 from .forms import *
-from django.urls import reverse
-from django.core.exceptions import ValidationError
+from selenium import webdriver
+from django.test import LiveServerTestCase
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+
 
 
 class UserProfileCreationTest(TestCase):
@@ -114,14 +114,17 @@ class TestLaundryRequest(TestCase):
         self.assertEqual(saved_laundry_request.to_user, self.user_profile2)
         self.assertEqual(saved_laundry_request.from_user, self.user_profile)
         self.assertEqual(saved_laundry_request.message, 'New test message')
-        
 
-        
-        
+class MySeleniumTests(LiveServerTestCase):
+    def setUp(self):
+        options = Options()
+        # If Chrome is not installed in a standard location, uncomment the next line
+        # options.binary_location = '/path/to/chrome'
+        self.driver = webdriver.Chrome(service=Service('/Users/Echav/Documents/CS3300/Projects/CS3300_project/chromedriver'), options=options)
 
-        
-        
+    def tearDown(self):
+        self.driver.quit()
 
-
-        
-         
+    def test_title(self):
+        self.driver.get(self.live_server_url)
+        assert 'Laundry Day' in self.driver.title
