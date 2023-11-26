@@ -14,6 +14,9 @@ from pathlib import Path
 import os 
 from pathlib import Path
 
+from django.urls import reverse_lazy # allows you to refer to the URL by its name instead of its path
+# This reverse_lazy function will resolve to the URL path associated with the name 'login' from both urls.py file.
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,7 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #Adding Laundry Day App
     'laundry_day',
-    'bootstrap5'
+    #'bootstrap5',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 # Add support for authenticating users
@@ -57,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 
 ROOT_URLCONF = 'django_project.urls'
@@ -109,6 +116,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Login Url that redirects to the login page if the user is not logged in
+LOGIN_URL = reverse_lazy('login')
+
+# Redirects to the home page if the login is successful
+LOGIN_REDIRECT_URL = reverse_lazy('user_detail') #Change this to the User Detail Page
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -125,13 +138,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/images/'
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+NPM_BIN_PATH = "/usr/local/bin/npm"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

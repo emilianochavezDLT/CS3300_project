@@ -20,5 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     #Connecting Path to laundry_day urls
-    path('', include('laundry_day.urls'))
+    path('', include('laundry_day.urls')),
+
+    path("__reload__/", include("django_browser_reload.urls")),
 ]

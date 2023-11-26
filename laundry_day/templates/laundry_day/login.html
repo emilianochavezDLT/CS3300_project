@@ -1,0 +1,35 @@
+{% extends 'laundry_day/base_template.html' %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="hero min-h-screen bg-base-200 px-8">
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+          <h1 class="text-5xl font-bold">Login now!</h1>
+          <p class="py-6">Welcome back to Laundry Day.</p>
+        </div>
+        <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <form class="card-body">
+            <div class="form-control">
+              <label class="label"><span class="label-text">Username</span></label>
+              {{ form.username }}
+            </div>
+            <div class="form-control">
+              <label class="label"><span class="label-text">Password</span></label>
+                {{ form.password }} 
+              <label class="label"><a href="#" class="label-text-alt link link-hover">Forgot password?</a></label>
+              {% if form.errors %}
+                <p class="text-red-500">Your username or password is incorrect.</p>
+              {% endif %}
+            </div>
+            <div class="form-control mt-6">
+              <button class="btn btn-primary" id="login_button">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
