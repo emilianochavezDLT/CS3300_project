@@ -61,10 +61,10 @@
           </li>
           <li tabindex="0">
             <details>
-              <summary>Family</summary>
+              <summary id="Family_dropdown">Family</summary>
               <ul class="p-2">
                 <li>
-                  <a href="{%url 'create_family'%}">Create a Family</a>
+                  <a href="{%url 'create_family'%}" id="create_family_navbar">Create a Family</a>
                 </li>
                 <li>
                   <a>Something Else</a>
@@ -90,7 +90,7 @@
                 </a>
               </li>
               <li>
-                <a href="{% url 'logout' %}">Logout</a>
+                <a href="{% url 'logout' %}" id="logout_button">Logout</a>
               </li>
             {% else %}
               <li>

@@ -6,6 +6,9 @@ from selenium import webdriver
 from django.test import LiveServerTestCase
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+import time
+import requests
+from selenium.webdriver.common.by import By
 
 
 
@@ -118,13 +121,86 @@ class TestLaundryRequest(TestCase):
 class MySeleniumTests(LiveServerTestCase):
     def setUp(self):
         options = Options()
-        # If Chrome is not installed in a standard location, uncomment the next line
-        # options.binary_location = '/path/to/chrome'
+        options.headless = False
+        
         self.driver = webdriver.Chrome(service=Service('/Users/Echav/Documents/CS3300/Projects/CS3300_project/chromedriver'), options=options)
+
+         # Check if the server is running
+        response = requests.get(self.live_server_url)
+        if response.status_code != 200:
+            raise Exception('Server is not running')
+        
+        self.user = User.objects.create_user(username='testuser', password='1qdfds3E', first_name='test', last_name='user') # Create a user
 
     def tearDown(self):
         self.driver.quit()
 
-    def test_title(self):
+    #def test_title(self):
+    #    self.driver.get(self.live_server_url)
+    #    time.sleep(5)
+    #    assert 'Laundry Day' in self.driver.title, 'Title is not correct'
+
+    #The user should be able to login
+    # We are using the testuser that we created in the setup
+    # First name is test, last name is user
+    #The username is testuser and the password is 1qdfds3E
+    def test_login(self):
         self.driver.get(self.live_server_url)
-        assert 'Laundry Day' in self.driver.title
+        time.sleep(5)
+        self.driver.find_element(By.ID, 'login_button').click()
+        time.sleep(5)
+        self.driver.find_element(By.ID, 'id_username').send_keys('testuser')
+        self.driver.find_element(By.ID, 'id_password').send_keys('1qdfds3E')
+        time.sleep(5)
+        self.driver.find_element(By.ID, 'login_button').click()
+        time.sleep(5)
+        assert 'Laundry Day' in self.driver.title, 'Title is not correct'
+        assert 'test' in self.driver.page_source, 'First_name is not correct'
+        assert 'user' in self.driver.page_source, 'Last_name is not correct'
+        assert 'Login' not in self.driver.page_source, 'Login button is present'
+
+    #The user should be able to logout
+    # We are using the testuser that we created in the setup
+    # First name is test, last name is user
+    #The username is testuser and the password is 1qdfds3E
+
+    def test_logout(self):
+        self.driver.get(self.live_server_url)
+        self.driver.find_element(By.ID, 'login_button').click()
+        self.driver.find_element(By.ID, 'id_username').send_keys('testuser')
+        self.driver.find_element(By.ID, 'id_password').send_keys('1qdfds3E')
+        self.driver.find_element(By.ID, 'login_button').click()
+        assert 'Logout' in self.driver.page_source, 'Logout button is not present'
+        self.driver.find_element(By.ID, 'logout_button').click()
+        time.sleep(5)
+        assert 'Login' in self.driver.page_source, 'Login button is not present'
+        assert 'Username' in self.driver.page_source, 'Username not is present'
+        assert 'Password' in self.driver.page_source, 'Password is not present'
+
+    #The user should be able to create a family
+    # We are using the testuser that we created in the setup
+    # First name is test, last name is user
+    #The username is testuser and the password is 1qdfds3E
+    #The family name is testfamily and the family code is 1234
+    def test_create_family(self):
+        self.driver.get(self.live_server_url)
+        self.driver.find_element(By.ID, 'login_button').click()
+        self.driver.find_element(By.ID, 'id_username').send_keys('testuser')
+        self.driver.find_element(By.ID, 'id_password').send_keys('1qdfds3E')
+        self.driver.find_element(By.ID, 'login_button').click()
+        
+        #You have to specify the full path to the chromedriver
+        #If you have a clickable elements amoung other elements, 
+        #then you have to specify the full path to the element
+        self.driver.find_element(By.ID, 'Family_dropdown').click() # Click on the family dropdown
+        self.driver.find_element(By.ID, 'create_family_navbar').click() # Then click on the create family button
+        
+        self.driver.find_element(By.ID, 'family_name').send_keys('testfamily')
+        self.driver.find_element(By.ID, 'family_code').send_keys('1234')
+        
+        self.driver.find_element(By.ID, 'create_family_button').click()
+        time.sleep(5)
+        assert 'testfamily' in self.driver.page_source, 'Family name is not present'
+        assert '1234' not in self.driver.page_source, 'Family code is present'
+        
+        

@@ -82,8 +82,12 @@ class LoginForm(forms.Form):
     # Some more styling
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
-        self.fields['password'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'})
+        self.fields['username'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
+                                                     'id':'id_username'
+                                                     })
+        self.fields['password'].widget.attrs.update({'class':'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6', 
+                                                     'id':'id_password'
+                                                     })
 
 #This is to create a laundry request
 class CreateLaundryRequest(forms.ModelForm):
@@ -152,11 +156,13 @@ class CreateFamilyForm(forms.ModelForm):
         super(CreateFamilyForm, self).__init__(*args, **kwargs)
         self.fields['family_name'].widget.attrs.update({
                                                         'class':'flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md', 
-                                                        'placeholder':'Family Name'}
+                                                        'placeholder':'Family Name',
+                                                        'id':'family_name'}
                                                     )
         self.fields['family_code'].widget.attrs.update({
                                                         'class':'flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md', 
-                                                        'placeholder':'Family Code'}
+                                                        'placeholder':'Family Code',
+                                                        'id':'family_code'}
                                                     )
 
 
