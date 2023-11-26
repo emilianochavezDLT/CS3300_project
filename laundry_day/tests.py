@@ -74,20 +74,54 @@ class TestLaundryRequest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='1qdfds3')
         self.user_profile = UserProfile.objects.get(user=self.user)
-        self.user2 = User.objects.create_user(username='testuser2', password='1qdfds3')
+        self.user2 = User.objects.create_user(username='testuser2', first_name='Test', last_name='User2', password='1qdfds3')
         self.user_profile2 = UserProfile.objects.get(user=self.user2)
-        self.user3 = User.objects.create_user(username='testuser3', password='1qdfds3')
-        self.user_profile3 = UserProfile.objects.get(user=self.user3)
         self.family = Family.objects.create(family_name='testfamily', family_code='1234')
-        self.family.family_members.add(self.user)
-        self.family.family_members.add(self.user2)
+        self.family.family_members.add(self.user, self.user2)
         self.family.save()
-
+    
     def test_valid_form(self):
-        form = CreateLaundryRequest({'to_user': self.user_profile2.pk, 'from_user': self.user_profile.pk, 'message': 'Test message'})
+        form = CreateLaundryRequest(user=self.user, data={'to_user': self.user_profile2, 'message': 'test message'})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data.get('to_user'), self.user_profile2)
+        self.assertEqual(form.cleaned_data.get('message'), 'test message')
         
-        self.assertEqual(self.user_profile2.pk, 2)
-        self.assertEqual(self.user_profile.pk, 1)
+        laundry_request = form.save(commit=False)
+        laundry_request.from_user = self.user_profile
+        laundry_request.save()
+        saved_laundry_request = LaundryRequests.objects.get(to_user=self.user_profile2, from_user=self.user_profile, message='test message')
+        self.assertEqual(LaundryRequests.objects.count(), 1)
+        self.assertEqual(saved_laundry_request.to_user, self.user_profile2)
+        self.assertEqual(saved_laundry_request.from_user, self.user_profile)
+        self.assertEqual(saved_laundry_request.message, 'test message')
+        
+    def test_invalid_form(self):
+        form = CreateLaundryRequest(user=self.user, data={'to_user': self.user_profile2, 'message': ''})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['message'], ['This field is required.'])
+    
+    def update_laundry_request(self):
+        form = UpdateLaundryRequest(user=self.user, data={'to_user': self.user_profile2, 'message': 'New test message'})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data.get('to_user'), self.user_profile2)
+        self.assertEqual(form.cleaned_data.get('message'), 'New test message')
+
+        laundry_request = form.save(commit=False)
+        laundry_request.from_user = self.user_profile
+        laundry_request.save()
+        saved_laundry_request = LaundryRequests.objects.get(to_user=self.user_profile2, from_user=self.user_profile, message='New test message')
+        self.assertEqual(LaundryRequests.objects.count(), 1)
+        self.assertEqual(saved_laundry_request.to_user, self.user_profile2)
+        self.assertEqual(saved_laundry_request.from_user, self.user_profile)
+        self.assertEqual(saved_laundry_request.message, 'New test message')
+        
+
+        
+        
+
+        
+        
+
 
         
          
