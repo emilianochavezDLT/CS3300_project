@@ -194,10 +194,9 @@ class MySeleniumTests(LiveServerTestCase):
         #then you have to specify the full path to the element
         self.driver.find_element(By.ID, 'Family_dropdown').click() # Click on the family dropdown
         self.driver.find_element(By.ID, 'create_family_navbar').click() # Then click on the create family button
-        
+        time.sleep(5)
         self.driver.find_element(By.ID, 'family_name').send_keys('testfamily')
         self.driver.find_element(By.ID, 'family_code').send_keys('1234')
-        
         self.driver.find_element(By.ID, 'create_family_button').click()
         time.sleep(5)
         assert 'testfamily' in self.driver.page_source, 'Family name is not present'
