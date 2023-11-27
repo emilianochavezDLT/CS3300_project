@@ -121,9 +121,17 @@ class TestLaundryRequest(TestCase):
 class MySeleniumTests(LiveServerTestCase):
     def setUp(self):
         options = Options()
-        options.headless = False
         
-        self.driver = webdriver.Chrome(service=Service('/Users/Echav/Documents/CS3300/Projects/CS3300_project/chromedriver'), options=options)
+        #For git actions
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        self.driver = webdriver.Chrome(options=options)
+        
+        
+        #This is to run the tests locally with the chrome driver
+        #options.headless = False
+        #self.driver = webdriver.Chrome(service=Service('/Users/Echav/Documents/CS3300/Projects/CS3300_project/chromedriver'), options=options)
 
          # Check if the server is running
         response = requests.get(self.live_server_url)
