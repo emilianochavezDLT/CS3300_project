@@ -126,23 +126,21 @@ class CreateLaundryRequest(forms.ModelForm):
 
 
 class UpdateLaundryRequest(forms.ModelForm):
-    to_user = forms.CharField(disabled=True) # This is to disable the to_user field, so that I just show the name of the to_user
+
+    # This is to create a field that is disabled, which makes it so that the user can't edit it
+    to_user_display = forms.CharField(disabled=True, required=False, label='To User')
 
     class Meta:
         model = LaundryRequests
-        fields = ['to_user', 'message']
+        fields = ['to_user', 'message'] # This is to set the fields that we want to use
+        widgets = {'to_user': forms.HiddenInput()} # This is to hide the to_user field
 
-    # This init method is to get the user and to_user
-    # So, that I can set the initial value of the to_user field
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None) # This is to get the user from the view and request
-        to_user = kwargs.pop('to_user', None) # This is to get the to_user from the view and request
-        print(f"User: {user}")
-        print(f"To User: {to_user}")
-        super(UpdateLaundryRequest, self).__init__(*args, **kwargs)
-        if user and to_user: # This is to check if the user and to_user exists
-            print(to_user)
-            self.fields['to_user'].initial = str(to_user) # This is to set the initial value of the to_user field
+        self.user = kwargs.pop('user', None) # Popping the user 
+        super(UpdateLaundryRequest, self).__init__(*args, **kwargs) # Calling the super class
+        if self.instance and self.instance.to_user: # Checking if the instance and to_user exists
+            self.fields['to_user_display'].initial = str(self.instance.to_user) # Setting the initial value for the to_user_display field
+
         
     
 

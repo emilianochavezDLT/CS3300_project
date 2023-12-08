@@ -4,6 +4,7 @@
 
 <form method="post">
     {% csrf_token %}
+    <p>To User: {{ form.instance.to_user }}</p>
     {{form}}
     <button class="btn btn-outline btn-primary" type="submit">Submit</button>
     <a class="btn btn-outline btn-info" href="{% url 'user_detail' request.user.id%}">Cancel</a>

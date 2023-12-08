@@ -260,24 +260,24 @@ def create_laundry_request(request, pk):
 
 
 
+
 @login_required
 def update_laundry_request(request, from_user_id, pk):
-    from_user = UserProfile.objects.get(id=from_user_id) # Get the user profile from the url
+    from_user = UserProfile.objects.get(id=from_user_id) # Get the user profile
     laundry_request = LaundryRequests.objects.get(id=pk, from_user=from_user) # Get the laundry request
-    to_user = laundry_request.to_user # Get the to user
-
-    # Check the UpdateLaundryRequest form in forms.py to see what is happening here
-    # It in the init function
-    form = UpdateLaundryRequest(instance=laundry_request, user=request.user, to_user=to_user, initial={'to_user': to_user}) # Create a form instance and send the user and to_user to the form
 
     if request.method == 'POST':
-        form = UpdateLaundryRequest(request.POST, instance=laundry_request, user=request.user, to_user=to_user, initial={'to_user': to_user}) # Create a form instance and send the user and to_user to the form
-        if form.is_valid():
+        form = UpdateLaundryRequest(request.POST, instance=laundry_request, user=request.user) # Create a form instance
+        if form.is_valid(): # Check if the form is valid
             form.save() # Save the laundry request
             return redirect('laundry_request_detail', from_user_id=laundry_request.from_user.id) # Redirect to the laundry request detail page
+    else:
+        form = UpdateLaundryRequest(instance=laundry_request, user=request.user) # Create a form instance
 
-    context = {'form': form} # Context
-    return render(request, 'laundry_day/update_laundry_request.html', context)
+    context = {'form': form}
+    return render(request, 'laundry_day/update_laundry_request.html', context) 
+
+
 
 @login_required
 def delete_laundry_request(request, pk):
